@@ -5,7 +5,7 @@
 		It contains all the implementation for configuration functions and runtime functions.
 		i.e., this is the application programming interface (API) for the GPIO peripheral.
 	\author Andrea Perez ie698276@iteso.mx & Fernanda Muñoz ie701371@iteso.mx
-	\date	11/Sep/2018
+	\date	10/OCT/2018
  */
 #ifndef GPIO_H_
 #define GPIO_H_
@@ -23,16 +23,6 @@
 #define GPIO_CLOCK_GATING_PORTD 0x00001000
 /** Constant that represent the clock enable for GPIO E */
 #define GPIO_CLOCK_GATING_PORTE 0x00002000
-
-#define B0_MASK 0X20 /*port c pin 5*/
-#define B1_MASK 0X80 /*port c pin 7*/
-#define B2_MASK 0X01 /*port c pin 0*/
-#define B3_MASK 0X100 /*port c pin 9*/
-#define B4_MASK 0X200 /*port c pin 8*/
-#define B5_MASK 0X08 /*port c pin 3*/
-#define B6_MASK 0X04 /*port c pin 2*/
-#define SW2_MASK 0x40
-/*#define SW3_MASK;*/
 
 /**Value one*/
 #define ONE (1u)
@@ -96,8 +86,8 @@ typedef enum{GPIO_A, /*!< Definition to select GPIO A */
 			} gpio_port_name_t;
 
 /*! This data type is used to configure the pin control register*/
-typedef const uint32_t GPIO_pinControlRegisterType;
 typedef const uint32_t gpio_pin_control_register_t;
+
 
 /********************************************************************************************/
 /********************************************************************************************/
@@ -107,9 +97,6 @@ typedef const uint32_t gpio_pin_control_register_t;
  	 \param[in]  portName Port to clear interrupts.
  	 \return void
  	 */
-uint8_t GPIO_get_flag_c();
-
-uint8_t GPIO_get_flag_a();
 
 void GPIO_clear_interrupt(gpio_port_name_t portName);
 /********************************************************************************************/
@@ -218,6 +205,6 @@ void GPIO_clear_pin(gpio_port_name_t portName, uint8_t pin);
  	 \param[in] pin Pin to be toggled.
  	 \return void
  */
-void GPIO_toogle_pin(gpio_port_name_t portName, uint8_t pin);
+void GPIO_tooglePIN(gpio_port_name_t portName, uint8_t pin);
 
 #endif /* GPIO_H_ */

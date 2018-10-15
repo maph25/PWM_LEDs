@@ -29,7 +29,7 @@
  */
  
 /**
- * @file    Practica_dos.c
+ * @file    project2.c
  * @brief   Application entry point.
  */
 #include <stdio.h>
