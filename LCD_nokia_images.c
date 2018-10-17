@@ -1,4 +1,9 @@
-
+/*
+ * LCD_nokia_images.h
+ *
+ *  Created on: 25/09/2018
+ *      Author: jlpe
+ */
 
 #include "LCD_nokia_images.h"
 

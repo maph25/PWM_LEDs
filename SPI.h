@@ -1,4 +1,9 @@
-
+/*
+ * SPI.h
+ *
+ *  Created on: Oct 15, 2018
+ *      Author: Fer Muñoz & Andrea Perez
+ */
 
 #ifndef SPI_H_
 #define SPI_H_
@@ -20,7 +25,7 @@
 #define SPI_FSIZE_8 SPI_CTAR_FMSZ(7)
 #define SPI_FSIZE_9 SPI_CTAR_FMSZ(8)
 #define SPI_FSIZE_10 SPI_CTAR_FMSZ(9)
-#define SPI_FSIZE_11 SPI_CTAR_FMSZ(10) 
+#define SPI_FSIZE_11 SPI_CTAR_FMSZ(10)
 #define SPI_FSIZE_12 SPI_CTAR_FMSZ(11)
 #define SPI_FSIZE_13 SPI_CTAR_FMSZ(12)
 #define SPI_FSIZE_14 SPI_CTAR_FMSZ(13)
@@ -69,7 +74,7 @@ typedef enum {SPI_0,
 			  SPI_1,
 			  SPI_2
 			  } spi_channel_t;
-/*Type for master or slave configuration*/			  
+/*Type for master or slave configuration*/
 typedef enum{SPI_SLAVE, SPI_MASTER} spi_master_t;
 /*Type for GPIO configuration that activates the GPIO for SPI*/
 typedef struct{
@@ -118,7 +123,7 @@ void SPI_start_tranference(spi_channel_t channel);
 void SPI_stop_tranference(spi_channel_t channel);
 /*It transmits the information contained in data*/
 void SPI_send_one_byte(uint8_t Data);
-/*It configures the SPI for transmission, this function as arguments receives a pointer to a constant structure where are all 
+/*It configures the SPI for transmission, this function as arguments receives a pointer to a constant structure where are all
  * the configuration parameters*/
 void SPI_init(const spi_config_t*);
 

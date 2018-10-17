@@ -1,10 +1,9 @@
 /*
  * Delay.c
  *
- *  Created on: 15/10/2018
- *      Author: Fer Muñoz
+ *  Created on: 11/10/2018
+ *      Author: Fer Muñoz & Andrea Perez
  */
-
 
 #include  "Delay.h"
 
@@ -18,4 +17,3 @@ void delay(uint16_t delay)
 
 		}
 }
-

@@ -1,10 +1,15 @@
-
+/*
+ * LCD_nokia.c
+ *
+ *  Created on: Oct 15, 2018
+ *      Author: Fer Muñoz & Andrea Perez
+ */
 
 #include "GPIO.h"
 #include "SPI.h"
 #include "LCD_nokia.h"
 #include "stdint.h"
-#include "Bits.h"
+#include "DataTypeDefinitions.h"
 
 
 
@@ -114,7 +119,7 @@ void LCD_nokia_init(void) {
 
 	GPIO_clock_gating(GPIO_D);
 	GPIO_data_direction_pin(GPIO_D,GPIO_OUTPUT, DATA_OR_CMD_PIN);
-	GPIO_pin_control_register(GPIO_D, bit_3, &lcd_port);
+	GPIO_pin_control_register(GPIO_D, BIT3, &lcd_port);
 
 	GPIO_data_direction_pin(GPIO_D,GPIO_OUTPUT,RESET_PIN);
 	GPIO_pin_control_register(GPIO_D,RESET_PIN,&lcd_port);

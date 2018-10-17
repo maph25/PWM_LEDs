@@ -1,4 +1,9 @@
-
+/*
+ * LCD_nokia.h
+ *
+ *  Created on: Oct 15, 2018
+ *      Author: Fer Muñoz & Andrea Perez
+ */
 
 #ifndef LCD_NOKIA_H_
 #define LCD_NOKIA_H_
@@ -32,7 +37,5 @@ void LCD_nokia_send_char(uint8_t);
 void LCD_nokia_send_string(uint8_t string []);
 /*It used in the initialization routine*/
 void LCD_nokia_delay(void);
-
-
 
 #endif /* LCD_NOKIA_H_ */

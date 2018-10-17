@@ -1,10 +1,9 @@
 /*
  * Delay.h
  *
- *  Created on: 15/10/2018
- *      Author: Fer Muñoz
+ *  Created on: Oct 11, 2018
+ *      Author: Fer Muñoz & Andrea Perez
  */
-
 
 #ifndef DELAY_H_
 #define DELAY_H_
