@@ -1,0 +1,13 @@
+Port B Pin 0: PWM Red
+Port B Pin 1: PWM Green
+Port B Pin 2: PWM Blue
+
+Port C Pin 5: B0
+Port C Pin 7: B1
+Port C Pin 0: B2
+Port C Pin 9: B3
+Port C Pin 8: B4
+Port C Pin 3: B5
+Port C Pin 2: B6
+
+Port C Pin 10: ADC1_SE6b 
