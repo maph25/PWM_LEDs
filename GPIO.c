@@ -39,7 +39,7 @@ void PORTC_IRQHandler()
 	uint32_t port_value;
 	port_value = GPIOC->PDIR;
 
-	if(port_value == 0x40)
+	if(port_value == SW2_MASK)
 	{
 		SW2 = TRUE;
 		GPIO_clear_interrupt(GPIO_C);
