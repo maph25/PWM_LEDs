@@ -61,89 +61,92 @@ void Button_init(void){
 
 }
 
+
+
+/*
 void Buttons_set()
 {
 	if (TRUE == GPIO_get_IRQ_status(GPIO_A)) {
 		if (statePortA) {
-			/*Sentencia a desactivar*/
+			//*Sentencia a desactivar*
 		} else {
-			/*Sentencia a ejecutar*/
+			//*Sentencia a ejecutar*
 		}
 		statePortA = !statePortA;
 		GPIO_clear_IRQ_status(GPIO_A);
 	}
 	if (TRUE == GPIO_get_IRQ_status(GPIO_C)) {
 		if (statePortC) {
-			/*Sentencia a desactivar*/
+			/*Sentencia a desactivar*
 		} else {
-			/*Sentencia a ejecutar*/
+			/*Sentencia a ejecutar*
 		}
 		statePortC = !statePortC;
 		GPIO_clear_IRQ_status(GPIO_C);
 	}
 	if (TRUE == GPIO_get_IRQ_statusB0()) {
 		if (statePortB0) {
-			/*Sentencia a desactivar*/
+			/*Sentencia a desactivar*
 		} else {
-			/*Sentencia a ejecutar*/
+			/*Sentencia a ejecutar*
 		}
 		statePortB0 = !statePortB0;
 		GPIO_clear_IRQ_statusB0();
 	}
 	if (TRUE == GPIO_get_IRQ_statusB1()) {
 		if (statePortB1) {
-			/*Sentencia a desactivar*/
+			/*Sentencia a desactivar*
 		} else {
-			/*Sentencia a ejecutar*/
+			/*Sentencia a ejecutar*
 		}
 		statePortB1 = !statePortB1;
 		GPIO_clear_IRQ_statusB1();
 	}
 	if (TRUE == GPIO_get_IRQ_statusB2()) {
 		if (statePortB2) {
-			/*Sentencia a desactivar*/
+			/*Sentencia a desactivar*
 		} else {
-			/*Sentencia a ejecutar*/
+			/*Sentencia a ejecutar*
 		}
 		statePortB2 = !statePortB2;
 		GPIO_clear_IRQ_statusB2();
 	}
 	if (TRUE == GPIO_get_IRQ_statusB3()) {
 		if (statePortB3) {
-			/*Sentencia a desactivar*/
+			/*Sentencia a desactivar*
 		} else {
-			/*Sentencia a ejecutar*/
+			/*Sentencia a ejecutar*
 		}
 		statePortB3 = !statePortB3;
 		GPIO_clear_IRQ_statusB3();
 	}
 	if (TRUE == GPIO_get_IRQ_statusB4()) {
 		if (statePortB4) {
-			/*Sentencia a desactivar*/
+			/*Sentencia a desactivar*
 		} else {
-			/*Sentencia a ejecutar*/
+			/*Sentencia a ejecutar*
 		}
 		statePortB4 = !statePortB4;
 		GPIO_clear_IRQ_statusB4();
 	}
 	if (TRUE == GPIO_get_IRQ_statusB5()) {
 		if (statePortB5) {
-			/*Sentencia a desactivar*/
+			/*Sentencia a desactivar*
 		} else {
-			/*Sentencia a ejecutar*/
+			/*Sentencia a ejecutar*
 		}
 		statePortB5 = !statePortB5;
 		GPIO_clear_IRQ_statusB5();
 	}
 	if (TRUE == GPIO_get_IRQ_statusB6()) {
 		if (statePortB6) {
-			/*Sentencia a desactivar*/
+			/*Sentencia a desactivar*
 		} else {
-			/*Sentencia a ejecutar*/
+			//*Sentencia a ejecutar*
 		}
 		statePortB6 = !statePortB6;
 		GPIO_clear_IRQ_statusB6();
 	}
-}
+}*/
 
 
