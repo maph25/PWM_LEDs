@@ -7,13 +7,16 @@
 #include "Sequence.h"
 #include "DataTypeDefinitions.h"
 #include "LCD_nokia.h"
+#include "PWM.h"
 #include "GPIO.h"
 
 uint16_t sequence[9];
 uint8_t element;
+sint16 colorLED;
 uint8_t DataAvailable;
 uint16_t Seq_val;
 uint8_t state;
+uint8_t statusFlag;
 
 uint32 SEQ_get_element(void)
 {
@@ -186,5 +189,119 @@ void SEQ_save_seq(void){
 
 		}/*Else*/
 	}
-
+	if(TRUE == FlagPortC){
+		statusFlag = PORTC_IRQHandler();
+		if(SW2_MASK == statusFlag){
+			for(state = 0; state > SEQ_MAX; state ++){
+				if(state > SEQ_MAX){
+					state = SEQ_INIT;
+				}
+				else{
+					switch(state){
+					case SEQ_INIT:
+					{
+						if(sequence[0] == SEQ_RED)
+							RGB(255,0,0);
+						else if(sequence[0] == SEQ_GREEN)
+							RGB(0,255,0);
+						else if(sequence[0] == SEQ_BLUE)
+							RGB(0,0,255);
+						state = SEQ_TWO;
+					}
+					case SEQ_TWO:
+					{
+						if(sequence[1] == SEQ_RED)
+							RGB(255,0,0);
+						else if(sequence[1] == SEQ_GREEN)
+							RGB(0,255,0);
+						else if(sequence[1] == SEQ_BLUE)
+							RGB(0,0,255);
+						state = SEQ_THREE;
+					}
+					case SEQ_THREE:
+					{
+						if(sequence[2] == SEQ_RED)
+							RGB(255,0,0);
+						else if(sequence[2] == SEQ_GREEN)
+							RGB(0,255,0);
+						else if(sequence[2] == SEQ_BLUE)
+							RGB(0,0,255);
+						state = SEQ_FOUR;
+					}
+					case SEQ_FOUR:
+					{
+						if(sequence[3] == SEQ_RED)
+							RGB(255,0,0);
+						else if(sequence[3] == SEQ_GREEN)
+							RGB(0,255,0);
+						else if(sequence[3] == SEQ_BLUE)
+							RGB(0,0,255);
+						state = SEQ_FIVE;
+					}
+					case SEQ_FIVE:
+					{
+						if(sequence[4] == SEQ_RED)
+							RGB(255,0,0);
+						else if(sequence[4] == SEQ_GREEN)
+							RGB(0,255,0);
+						else if(sequence[4] == SEQ_BLUE)
+							RGB(0,0,255);
+						state = SEQ_SIX;
+					}
+					case SEQ_SIX:
+					{
+						if(sequence[5] == SEQ_RED)
+							RGB(255,0,0);
+						else if(sequence[5] == SEQ_GREEN)
+							RGB(0,255,0);
+						else if(sequence[5] == SEQ_BLUE)
+							RGB(0,0,255);
+						state = SEQ_SEVEN;
+					}
+					case SEQ_SEVEN:
+					{
+						if(sequence[6] == SEQ_RED)
+							RGB(255,0,0);
+						else if(sequence[6] == SEQ_GREEN)
+							RGB(0,255,0);
+						else if(sequence[6] == SEQ_BLUE)
+							RGB(0,0,255);
+						state = SEQ_EIGHT;
+					}
+					case SEQ_EIGHT:
+					{
+						if(sequence[7] == SEQ_RED)
+							RGB(255,0,0);
+						else if(sequence[7] == SEQ_GREEN)
+							RGB(0,255,0);
+						else if(sequence[7] == SEQ_BLUE)
+							RGB(0,0,255);
+						state = SEQ_NINE;
+					}
+					case SEQ_NINE:
+					{
+						if(sequence[8] == SEQ_RED)
+							RGB(255,0,0);
+						else if(sequence[8] == SEQ_GREEN)
+							RGB(0,255,0);
+						else if(sequence[8] == SEQ_BLUE)
+							RGB(0,0,255);
+						state = SEQ_MAX;
+					}
+					case SEQ_MAX:
+					{
+						if(sequence[9] == SEQ_RED)
+							RGB(255,0,0);
+						else if(sequence[9] == SEQ_GREEN)
+							RGB(0,255,0);
+						else if(sequence[9] == SEQ_BLUE)
+							RGB(0,0,255);
+						break;
+					}
+				}/*Switch*/
+			}
+		}/*For*/
+	}
+}/*SW2*/
 }
+
