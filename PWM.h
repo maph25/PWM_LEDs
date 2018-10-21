@@ -14,6 +14,7 @@
 
 
 #define FLEX_TIMER_0_CLOCK_GATING 0x01000000
+#define FLEX_TIMER_3_CLOCK_GATING 0x02000000
 
 #define FLEX_TIMER_FAULTIE  0x80
 #define FLEX_TIMER_FAULTM_0   0x00
@@ -62,8 +63,7 @@
 #define  FLEX_TIMER_CHF   0x80
 
 
-void RGB_init();
-
+void RGB_init(uint16_t red, uint16_t green, uint16_t blue);
 
 
 #endif /* PWM_H_ */

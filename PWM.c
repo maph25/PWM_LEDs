@@ -9,32 +9,31 @@
 #include "MK64F12.h"
 #include "DataTypeDefinitions.h"
 
-/*void RGB_LED(uint32_t Red, uint32_t Green, uint32_t Blue) {
-    Red &= FTM_OUTMASK_CH0OM_MASK;
-    Green &= FTM_OUTMASK_CH1OM_MASK;
-    Blue &= FTM_OUTMASK_CH2OM_MASK;
-    //FTM0_C5V = red;
-     FTM0_C4V = green;
-     FTM0_C7V = blue;
-
-}  */
+gpio_pin_control_register_t PIN_D_0 = GPIO_MUX4;
+gpio_pin_control_register_t PIN_D_1 = GPIO_MUX4;
+gpio_pin_control_register_t PIN_D_2 = GPIO_MUX4;
 
 
-void RGB_init(sint16 red, sint16 green, sint16 blue) {
-	SIM->SCGC6 |= FLEX_TIMER_0_CLOCK_GATING;
-
+void RGB_init(uint16_t red, uint16_t green, uint16_t blue) {
+	GPIO_clock_gating(GPIO_D);
+	/** Clock gating for the FlexTimer 0*/
+	SIM->SCGC3 |= FLEX_TIMER_3_CLOCK_GATING;
+	/*Pin configuration*/
+	GPIO_pin_control_register(GPIO_D, BIT0, &PIN_D_0);
+	GPIO_pin_control_register(GPIO_D, BIT1, &PIN_D_1);
+	GPIO_pin_control_register(GPIO_D, BIT2, &PIN_D_2);
 
     // Make write_protected registers writable
-    FTM0_MODE |= FLEX_TIMER_WPDIS;
-    FTM0_MODE &= ~ FLEX_TIMER_FTMEN;
+    FTM3->MODE |= FLEX_TIMER_WPDIS;
+    FTM3->MODE &= ~ FLEX_TIMER_FTMEN;
     // Overflow at 255
-    FTM0_MOD  = 0xFF;
-    FTM0->CONTROLS[0].SC = FLEX_TIMER_MSB | FLEX_TIMER_ELSB;
-    FTM0->CONTROLS[0].CnV = red;
-    FTM0->CONTROLS[1].SC = FLEX_TIMER_MSB | FLEX_TIMER_ELSB;
-    FTM0->CONTROLS[1].CnV = green;
-    FTM0->CONTROLS[2].SC = FLEX_TIMER_MSB | FLEX_TIMER_ELSB;
-    FTM0->CONTROLS[2].CnV = blue;
-    FTM0_SC   = FLEX_TIMER_CLKS_1 | FLEX_TIMER_PS_128;
+    FTM3->MOD  = 0xFF;
+    FTM3->CONTROLS[0].CnSC = FLEX_TIMER_MSB | FLEX_TIMER_ELSB;
+    FTM3->CONTROLS[0].CnV = red;
+    FTM3->CONTROLS[1].CnSC = FLEX_TIMER_MSB | FLEX_TIMER_ELSB;
+    FTM3->CONTROLS[1].CnV = green;
+    FTM3->CONTROLS[2].CnSC = FLEX_TIMER_MSB | FLEX_TIMER_ELSB;
+    FTM3->CONTROLS[2].CnV = blue;
+    FTM3->SC = FLEX_TIMER_CLKS_1 | FLEX_TIMER_PS_1; /*Might have to change frequency*/
 
 }
