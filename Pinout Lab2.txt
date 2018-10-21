@@ -1,6 +1,6 @@
-Port B Pin 0: PWM Red
-Port B Pin 1: PWM Green
-Port B Pin 2: PWM Blue
+Port D Pin 0: PWM Red  Alternate 4, Flex 3, Channel 0
+Port D Pin 1: PWM Green Alternate 4, Flex 3, Channel 1
+Port D Pin 2: PWM Blue Alternate 4, Flex 3, Channel 2
 
 Port C Pin 5: B0
 Port C Pin 7: B1
