@@ -5,12 +5,86 @@
 		It contains all the implementation for configuration functions and runtime functions.
 		i.e., this is the application programming interface (API) for the GPIO peripheral.
 	\author Andrea Perez ie698276@iteso.mx & Fernanda Muñoz ie701371@iteso.mx
-	\date	02/OCT/2018
+	\date	11/Sep/2018
  */
 #include "MK64F12.h"
 #include "GPIO.h"
 #include "DataTypeDefinitions.h"
 
+static uint8_t FlagPortC;
+static uint8_t FlagPortA;
+static uint8_t B0; /*port c pin 5*/
+static uint8_t B1; /*port c pin 7*/
+static uint8_t B2; /*port c pin 0*/
+static uint8_t B3; /*port c pin 9*/
+static uint8_t B4; /*port c pin 8*/
+static uint8_t B5; /*port c pin 3*/
+static uint8_t B6; /*port c pin 2*/
+static uint8_t SW2;
+
+uint8_t GPIO_get_flag_c(){
+	return FlagPortC = TRUE;
+}
+uint8_t GPIO_get_flag_a(){
+	return FlagPortA = TRUE;
+}
+void PORTA_IRQHandler()
+{
+	FlagPortA = TRUE;
+	GPIO_clear_interrupt(GPIO_A);
+}
+
+void PORTC_IRQHandler()
+{
+	uint32_t port_value;
+	port_value = GPIOC->PDIR;
+
+	if(port_value == SW2_MASK)
+	{
+		SW2 = TRUE;
+		GPIO_clear_interrupt(GPIO_C);
+	}
+	else if(port_value == B0_MASK )
+	{
+		B0 = TRUE;
+		GPIO_clear_interrupt(GPIO_C);
+	}
+	else if(port_value == B0_MASK )
+		{
+			B0 = TRUE;
+			GPIO_clear_interrupt(GPIO_C);
+		}
+	else if(port_value == B1_MASK )
+		{
+			B1 = TRUE;
+			GPIO_clear_interrupt(GPIO_C);
+		}
+	else if(port_value == B2_MASK )
+		{
+			B2 = TRUE;
+			GPIO_clear_interrupt(GPIO_C);
+		}
+	else if(port_value == B3_MASK )
+		{
+			B3 = TRUE;
+			GPIO_clear_interrupt(GPIO_C);
+		}
+	else if(port_value == B4_MASK )
+		{
+			B4 = TRUE;
+			GPIO_clear_interrupt(GPIO_C);
+		}
+	else if(port_value == B5_MASK )
+		{
+			B5 = TRUE;
+			GPIO_clear_interrupt(GPIO_C);
+		}
+	else if(port_value == B6_MASK )
+		{
+			B6 = TRUE;
+			GPIO_clear_interrupt(GPIO_C);
+		}
+}
 
 void GPIO_clear_interrupt(gpio_port_name_t portName)
 {
