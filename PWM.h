@@ -62,8 +62,11 @@
 #define  FLEX_TIMER_CHIE  0x40
 #define  FLEX_TIMER_CHF   0x80
 
+void FTM3_ISR();
 
-void RGB_init(uint16_t red, uint16_t green, uint16_t blue);
+void PWM_channel_value(sint16 red, sint16 green, sint16 blue );
+
+void RGB_init();
 
 
 #endif /* PWM_H_ */

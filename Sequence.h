@@ -24,6 +24,8 @@
 #define SEQ_THREE (3u)
 #define SEQ_TWO (2u)
 #define SEQ_INIT (1u)
+#define SEQ_RGB_ON (255u)
+#define SEQ_RGB_OFF (0x00)
 
 uint32 SEQ_decode (uint32 reading);
 uint32 SEQ_get_element(void);

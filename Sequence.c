@@ -9,6 +9,7 @@
 #include "LCD_nokia.h"
 #include "PWM.h"
 #include "GPIO.h"
+#include "Delay.h"
 
 uint16_t sequence[9];
 uint8_t element;
@@ -22,8 +23,8 @@ static uint8_t B1; /*port c pin 7*/
 static uint8_t B2; /*port c pin 0*/
 static uint8_t B3; /*port c pin 9*/
 static uint8_t B4; /*port c pin 8*/
-static uint8_t B5; /*port c pin 3*/
-static uint8_t B6; /*port c pin 2*/
+/*static uint8_t B5; port c pin 3
+static uint8_t B6; port c pin 2*/
 static uint8_t SW2;
 
 
@@ -66,7 +67,7 @@ uint32 SEQ_decode (uint32 reading){
 				B4 = TRUE;
 				return B4;
 			}
-		else if(port_value == B5_MASK )
+		/*else if(port_value == B5_MASK )
 			{
 				B5 = TRUE;
 				return B5;
@@ -75,7 +76,7 @@ uint32 SEQ_decode (uint32 reading){
 			{
 				B6 = TRUE;
 				return B6;
-			}
+			}*/
 		else
 			return 0xFF; /*Change magic number, only for checking*/
 }
@@ -236,102 +237,180 @@ void SEQ_save_seq(void){
 					switch(state){
 					case SEQ_INIT:
 					{
-						if(sequence[0] == SEQ_RED)
-							RGB_init(255,0,0);
-						else if(sequence[0] == SEQ_GREEN)
-							RGB_init(0,255,0);
-						else if(sequence[0] == SEQ_BLUE)
-							RGB_init(0,0,255);
-						state = SEQ_TWO;
+						if(sequence[0] == SEQ_RED){
+							PWM_channel_value(SEQ_RGB_ON,SEQ_RGB_OFF,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_TWO;
+						}
+						else if(sequence[0] == SEQ_GREEN){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_ON,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_TWO;
+						}
+						else if(sequence[0] == SEQ_BLUE){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_OFF,SEQ_RGB_ON);
+							delay(20000);
+							state = SEQ_TWO;
+						}
 					}
 					case SEQ_TWO:
 					{
-						if(sequence[1] == SEQ_RED)
-							RGB_init(255,0,0);
-						else if(sequence[1] == SEQ_GREEN)
-							RGB_init(0,255,0);
-						else if(sequence[1] == SEQ_BLUE)
-							RGB_init(0,0,255);
-						state = SEQ_THREE;
+						if(sequence[0] == SEQ_RED){
+							PWM_channel_value(SEQ_RGB_ON,SEQ_RGB_OFF,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_THREE;
+						}
+						else if(sequence[0] == SEQ_GREEN){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_ON,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_THREE;
+						}
+						else if(sequence[0] == SEQ_BLUE){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_OFF,SEQ_RGB_ON);
+							delay(20000);
+							state = SEQ_THREE;
+						}
 					}
 					case SEQ_THREE:
 					{
-						if(sequence[2] == SEQ_RED)
-							RGB_init(255,0,0);
-						else if(sequence[2] == SEQ_GREEN)
-							RGB_init(0,255,0);
-						else if(sequence[2] == SEQ_BLUE)
-							RGB_init(0,0,255);
-						state = SEQ_FOUR;
+						if(sequence[0] == SEQ_RED){
+							PWM_channel_value(SEQ_RGB_ON,SEQ_RGB_OFF,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_FOUR;
+						}
+						else if(sequence[0] == SEQ_GREEN){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_ON,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_FOUR;
+						}
+						else if(sequence[0] == SEQ_BLUE){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_OFF,SEQ_RGB_ON);
+							delay(20000);
+							state = SEQ_FOUR;
+						}
 					}
 					case SEQ_FOUR:
 					{
-						if(sequence[3] == SEQ_RED)
-							RGB_init(255,0,0);
-						else if(sequence[3] == SEQ_GREEN)
-							RGB_init(0,255,0);
-						else if(sequence[3] == SEQ_BLUE)
-							RGB_init(0,0,255);
-						state = SEQ_FIVE;
+						if(sequence[0] == SEQ_RED){
+							PWM_channel_value(SEQ_RGB_ON,SEQ_RGB_OFF,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_FIVE;
+						}
+						else if(sequence[0] == SEQ_GREEN){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_ON,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_FIVE;
+						}
+						else if(sequence[0] == SEQ_BLUE){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_OFF,SEQ_RGB_ON);
+							delay(20000);
+							state = SEQ_FIVE;
+						}
 					}
 					case SEQ_FIVE:
 					{
-						if(sequence[4] == SEQ_RED)
-							RGB_init(255,0,0);
-						else if(sequence[4] == SEQ_GREEN)
-							RGB_init(0,255,0);
-						else if(sequence[4] == SEQ_BLUE)
-							RGB_init(0,0,255);
-						state = SEQ_SIX;
+						if(sequence[0] == SEQ_RED){
+							PWM_channel_value(SEQ_RGB_ON,SEQ_RGB_OFF,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_SIX;
+						}
+						else if(sequence[0] == SEQ_GREEN){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_ON,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_SIX;
+						}
+						else if(sequence[0] == SEQ_BLUE){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_OFF,SEQ_RGB_ON);
+							delay(20000);
+							state = SEQ_SIX;
+						}
 					}
 					case SEQ_SIX:
 					{
-						if(sequence[5] == SEQ_RED)
-							RGB_init(255,0,0);
-						else if(sequence[5] == SEQ_GREEN)
-							RGB_init(0,255,0);
-						else if(sequence[5] == SEQ_BLUE)
-							RGB_init(0,0,255);
-						state = SEQ_SEVEN;
+						if(sequence[0] == SEQ_RED){
+							PWM_channel_value(SEQ_RGB_ON,SEQ_RGB_OFF,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_SEVEN;
+						}
+						else if(sequence[0] == SEQ_GREEN){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_ON,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_SEVEN;
+						}
+						else if(sequence[0] == SEQ_BLUE){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_OFF,SEQ_RGB_ON);
+							delay(20000);
+							state = SEQ_SEVEN;
+						}
 					}
 					case SEQ_SEVEN:
 					{
-						if(sequence[6] == SEQ_RED)
-							RGB_init(255,0,0);
-						else if(sequence[6] == SEQ_GREEN)
-							RGB_init(0,255,0);
-						else if(sequence[6] == SEQ_BLUE)
-							RGB_init(0,0,255);
-						state = SEQ_EIGHT;
+						if(sequence[0] == SEQ_RED){
+							PWM_channel_value(SEQ_RGB_ON,SEQ_RGB_OFF,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_EIGHT;
+						}
+						else if(sequence[0] == SEQ_GREEN){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_ON,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_EIGHT;
+						}
+						else if(sequence[0] == SEQ_BLUE){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_OFF,SEQ_RGB_ON);
+							delay(20000);
+							state = SEQ_EIGHT;
+						}
 					}
 					case SEQ_EIGHT:
 					{
-						if(sequence[7] == SEQ_RED)
-							RGB_init(255,0,0);
-						else if(sequence[7] == SEQ_GREEN)
-							RGB_init(0,255,0);
-						else if(sequence[7] == SEQ_BLUE)
-							RGB_init(0,0,255);
-						state = SEQ_NINE;
+						if(sequence[0] == SEQ_RED){
+							PWM_channel_value(SEQ_RGB_ON,SEQ_RGB_OFF,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_NINE;
+						}
+						else if(sequence[0] == SEQ_GREEN){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_ON,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_NINE;
+						}
+						else if(sequence[0] == SEQ_BLUE){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_OFF,SEQ_RGB_ON);
+							delay(20000);
+							state = SEQ_NINE;
+						}
 					}
 					case SEQ_NINE:
 					{
-						if(sequence[8] == SEQ_RED)
-							RGB_init(255,0,0);
-						else if(sequence[8] == SEQ_GREEN)
-							RGB_init(0,255,0);
-						else if(sequence[8] == SEQ_BLUE)
-							RGB_init(0,0,255);
-						state = SEQ_MAX;
+						if(sequence[0] == SEQ_RED){
+							PWM_channel_value(SEQ_RGB_ON,SEQ_RGB_OFF,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_MAX;
+						}
+						else if(sequence[0] == SEQ_GREEN){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_ON,SEQ_RGB_OFF);
+							delay(20000);
+							state = SEQ_MAX;
+						}
+						else if(sequence[0] == SEQ_BLUE){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_OFF,SEQ_RGB_ON);
+							delay(20000);
+							state = SEQ_MAX;
+						}
 					}
 					case SEQ_MAX:
 					{
-						if(sequence[9] == SEQ_RED)
-							RGB_init(255,0,0);
-						else if(sequence[9] == SEQ_GREEN)
-							RGB_init(0,255,0);
-						else if(sequence[9] == SEQ_BLUE)
-							RGB_init(0,0,255);
+						if(sequence[0] == SEQ_RED){
+							PWM_channel_value(SEQ_RGB_ON,SEQ_RGB_OFF,SEQ_RGB_OFF);
+							delay(20000);
+						}
+						else if(sequence[0] == SEQ_GREEN){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_ON,SEQ_RGB_OFF);
+							delay(20000);
+						}
+						else if(sequence[0] == SEQ_BLUE){
+							PWM_channel_value(SEQ_RGB_OFF,SEQ_RGB_OFF,SEQ_RGB_ON);
+							delay(20000);
+						}
 						break;
 					}
 				}/*Switch*/
