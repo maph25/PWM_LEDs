@@ -21,9 +21,9 @@ uint32 statusFlag;
 static uint8_t B0; /*port c pin 5*/
 static uint8_t B1; /*port c pin 7*/
 static uint8_t B2; /*port c pin 0*/
-static uint8_t B3; /*port c pin 9*/
-static uint8_t B4; /*port c pin 8*/
-/*static uint8_t B5; port c pin 3
+static uint16_t B3; /*port c pin 9*/
+/*static uint16_t B4; *port c pin 8
+static uint8_t B5; port c pin 3
 static uint8_t B6; port c pin 2*/
 static uint8_t SW2;
 
@@ -39,50 +39,49 @@ uint32 SEQ_decode (uint32 reading){
 
 		if(port_value == SW2_MASK)
 		{
-			SW2 = TRUE;
+			SW2 = SW2_MASK;
 			return SW2;
 		}
-		else if(port_value == B0_MASK )
+		else if(port_value == B0_MASK)
 			{
-				B0 = TRUE;
+				B0 = B0_MASK;
 				return B0;
 			}
-		else if(port_value == B1_MASK )
+		else if(port_value == B1_MASK)
 			{
-				B1 = TRUE;
+				B1 = B1_MASK;
 				return B1;
 			}
-		else if(port_value == B2_MASK )
+		else if(port_value == B2_MASK)
 			{
-				B2 = TRUE;
+				B2 = B2_MASK;
 				return B2;
 			}
-		else if(port_value == B3_MASK )
+		else if(port_value == B3_MASK)
 			{
-				B3 = TRUE;
+				B3 = B3_MASK;
 				return B3;
 			}
-		else if(port_value == B4_MASK )
+		/*else if(port_value == B4_MASK )
 			{
-				B4 = TRUE;
+				B4 = B4_MASK;
 				return B4;
 			}
-		/*else if(port_value == B5_MASK )
+		else if(port_value == B5_MASK )
 			{
-				B5 = TRUE;
+				B5 = B5_MASK;
 				return B5;
 			}
 		else if(port_value == B6_MASK )
 			{
-				B6 = TRUE;
+				B6 = B6_MASK;
 				return B6;
 			}*/
 		else
 			return 0xFF; /*Change magic number, only for checking*/
 }
 
-void SEQ_save_seq(void){
-	LCD_nokia_goto_xy(25,2);
+void SEQ_execute(void){
 	for(state = 0; state > SEQ_MAX; state ++){
 		if(state > SEQ_MAX){
 			state = SEQ_INIT;
@@ -96,12 +95,18 @@ void SEQ_save_seq(void){
 					{
 						element = SEQ_get_element();
 						sequence[0] = SEQ_decode(element);
-						if(sequence[0] == SEQ_RED)
+						if(sequence[0] == SEQ_RED){
+							LCD_nokia_goto_xy(5,5);
 							LCD_nokia_send_char('R'); /*It prints a character*/
-						else if(sequence[0] == SEQ_GREEN)
+						}
+						else if(sequence[0] == SEQ_GREEN){
+							LCD_nokia_goto_xy(5,5);
 							LCD_nokia_send_char('G'); /*It prints a character*/
-						else if(sequence[0] == SEQ_BLUE)
+						}
+						else if(sequence[0] == SEQ_BLUE){
+							LCD_nokia_goto_xy(5,5);
 							LCD_nokia_send_char('B'); /*It prints a character*/
+						}
 						state = SEQ_TWO;
 					}
 				case SEQ_TWO:
@@ -109,25 +114,37 @@ void SEQ_save_seq(void){
 					{
 						element = SEQ_get_element();
 						sequence[1] = SEQ_decode(element);
-						if(sequence[1] == SEQ_RED)
+						if(sequence[1] == SEQ_RED){
 							LCD_nokia_send_char('R'); /*It prints a character*/
-						else if(sequence[1] == SEQ_GREEN)
-							LCD_nokia_send_char('G'); /*It prints a character*/
-						else if(sequence[1] == SEQ_BLUE)
-							LCD_nokia_send_char('B'); /*It prints a character*/
-						state = SEQ_THREE;
+							LCD_nokia_goto_xy(10,5);
 						}
+						else if(sequence[1] == SEQ_GREEN){
+							LCD_nokia_send_char('G'); /*It prints a character*/
+							LCD_nokia_goto_xy(10,5);
+						}
+						else if(sequence[1] == SEQ_BLUE){
+							LCD_nokia_send_char('B'); /*It prints a character*/
+							LCD_nokia_goto_xy(10,5);
+						}
+						state = SEQ_THREE;
+					}
 				case SEQ_THREE:
 					if(DataAvailable == TRUE)
 					{
 						element = SEQ_get_element();
 						sequence[2] = SEQ_decode(element);
-						if(sequence[2] == SEQ_RED)
+						if(sequence[2] == SEQ_RED){
 							LCD_nokia_send_char('R'); /*It prints a character*/
-						else if(sequence[2] == SEQ_GREEN)
+							LCD_nokia_goto_xy(15,5);
+						}
+						else if(sequence[2] == SEQ_GREEN){
 							LCD_nokia_send_char('G'); /*It prints a character*/
-						else if(sequence[2] == SEQ_BLUE)
+							LCD_nokia_goto_xy(15,5);
+						}
+						else if(sequence[2] == SEQ_BLUE){
 							LCD_nokia_send_char('B'); /*It prints a character*/
+							LCD_nokia_goto_xy(15,5);
+						}
 						state = SEQ_FOUR;
 					}
 				case SEQ_FOUR:
@@ -135,12 +152,18 @@ void SEQ_save_seq(void){
 					{
 						element = SEQ_get_element();
 						sequence[3] = SEQ_decode(element);
-						if(sequence[3] == SEQ_RED)
+						if(sequence[3] == SEQ_RED){
 							LCD_nokia_send_char('R'); /*It prints a character*/
-						else if(sequence[3] == SEQ_GREEN)
+							LCD_nokia_goto_xy(20,5);
+						}
+						else if(sequence[3] == SEQ_GREEN){
 							LCD_nokia_send_char('G'); /*It prints a character*/
-						else if(sequence[3] == SEQ_BLUE)
+							LCD_nokia_goto_xy(20,5);
+						}
+						else if(sequence[3] == SEQ_BLUE){
 							LCD_nokia_send_char('B'); /*It prints a character*/
+							LCD_nokia_goto_xy(20,5);
+						}
 						state = SEQ_FIVE;
 					}
 				case SEQ_FIVE:
@@ -148,12 +171,18 @@ void SEQ_save_seq(void){
 					{
 						element = SEQ_get_element();
 						sequence[4] = SEQ_decode(element);
-						if(sequence[4] == SEQ_RED)
+						if(sequence[4] == SEQ_RED){
 							LCD_nokia_send_char('R'); /*It prints a character*/
-						else if(sequence[4] == SEQ_GREEN)
+							LCD_nokia_goto_xy(25,5);
+						}
+						else if(sequence[4] == SEQ_GREEN){
 							LCD_nokia_send_char('G'); /*It prints a character*/
-						else if(sequence[4] == SEQ_BLUE)
+							LCD_nokia_goto_xy(25,5);
+						}
+						else if(sequence[4] == SEQ_BLUE){
 							LCD_nokia_send_char('B'); /*It prints a character*/
+							LCD_nokia_goto_xy(25,5);
+						}
 						state = SEQ_SIX;
 					}
 				case SEQ_SIX:
@@ -161,12 +190,18 @@ void SEQ_save_seq(void){
 					{
 						element = SEQ_get_element();
 						sequence[5] = SEQ_decode(element);
-						if(sequence[5] == SEQ_RED)
+						if(sequence[5] == SEQ_RED){
 							LCD_nokia_send_char('R'); /*It prints a character*/
-						else if(sequence[5] == SEQ_GREEN)
+							LCD_nokia_goto_xy(30,5);
+						}
+						else if(sequence[5] == SEQ_GREEN){
 							LCD_nokia_send_char('G'); /*It prints a character*/
-						else if(sequence[5] == SEQ_BLUE)
+							LCD_nokia_goto_xy(30,5);
+						}
+						else if(sequence[5] == SEQ_BLUE){
+							LCD_nokia_goto_xy(30,5);
 							LCD_nokia_send_char('B'); /*It prints a character*/
+						}
 						state = SEQ_SEVEN;
 					}
 				case SEQ_SEVEN:
@@ -174,12 +209,18 @@ void SEQ_save_seq(void){
 					{
 						element = SEQ_get_element();
 						sequence[6] = SEQ_decode(element);
-						if(sequence[6] == SEQ_RED)
+						if(sequence[6] == SEQ_RED){
 							LCD_nokia_send_char('R'); /*It prints a character*/
-						else if(sequence[6] == SEQ_GREEN)
+							LCD_nokia_goto_xy(35,5);
+						}
+						else if(sequence[6] == SEQ_GREEN){
 							LCD_nokia_send_char('G'); /*It prints a character*/
-						else if(sequence[6] == SEQ_BLUE)
+							LCD_nokia_goto_xy(35,5);
+						}
+						else if(sequence[6] == SEQ_BLUE){
 							LCD_nokia_send_char('B'); /*It prints a character*/
+							LCD_nokia_goto_xy(35,5);
+						}
 						state = SEQ_EIGHT;
 					}
 				case SEQ_EIGHT:
@@ -187,12 +228,18 @@ void SEQ_save_seq(void){
 					{
 						element = SEQ_get_element();
 						sequence[7] = SEQ_decode(element);
-						if(sequence[7] == SEQ_RED)
+						if(sequence[7] == SEQ_RED){
+							LCD_nokia_goto_xy(40,5);
 							LCD_nokia_send_char('R'); /*It prints a character*/
-						else if(sequence[7]== SEQ_GREEN)
+						}
+						else if(sequence[7]== SEQ_GREEN){
+							LCD_nokia_goto_xy(40,5);
 							LCD_nokia_send_char('G'); /*It prints a character*/
-						else if(sequence[7] == SEQ_BLUE)
+						}
+						else if(sequence[7] == SEQ_BLUE){
+							LCD_nokia_goto_xy(40,5);
 							LCD_nokia_send_char('B'); /*It prints a character*/
+						}
 						state = SEQ_NINE;
 					}
 				case SEQ_NINE:
@@ -200,12 +247,18 @@ void SEQ_save_seq(void){
 					{
 						element = SEQ_get_element();
 						sequence[8] = SEQ_decode(element);
-						if(sequence[8] == SEQ_RED)
+						if(sequence[8] == SEQ_RED){
 							LCD_nokia_send_char('R'); /*It prints a character*/
-						else if(sequence[8] == SEQ_GREEN)
+							LCD_nokia_goto_xy(45,5);
+						}
+						else if(sequence[8] == SEQ_GREEN){
+							LCD_nokia_goto_xy(45,5);
 							LCD_nokia_send_char('G'); /*It prints a character*/
-						else if(sequence[8] == SEQ_BLUE)
+						}
+						else if(sequence[8] == SEQ_BLUE){
+							LCD_nokia_goto_xy(45,5);
 							LCD_nokia_send_char('B'); /*It prints a character*/
+						}
 						state = SEQ_MAX;
 					}
 				case SEQ_MAX:

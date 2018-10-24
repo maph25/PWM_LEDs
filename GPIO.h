@@ -52,6 +52,8 @@
 #define GPIO_ODE   0x00000020
 /** Selects between low drive strength and high drive strength */
 #define GPIO_DSE   0x00000040
+/**Selects default alternative*/
+#define GPIO_MUX0  0x00000000
 /** Selects alternative function 1 (GPIO) */
 #define GPIO_MUX1  0x00000100
 /** Selects alternative function 2 */

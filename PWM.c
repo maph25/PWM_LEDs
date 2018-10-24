@@ -13,15 +13,13 @@ gpio_pin_control_register_t PIN_D_0 = GPIO_MUX4;
 gpio_pin_control_register_t PIN_D_1 = GPIO_MUX4;
 gpio_pin_control_register_t PIN_D_2 = GPIO_MUX4;
 
-void FTM3_ISR()
-{
+void FTM3_ISR(){
 	FTM3->SC &= ~FLEX_TIMER_TOF;
 	GPIOD->PDOR ^= 0xFF;
 }
 
 
-void PWM_channel_value(sint16 red, sint16 green, sint16 blue )
-{
+void PWM_channel_value(sint16 red, sint16 green, sint16 blue ){
 	/**Assigns a new value for the duty cycle*/
 	FTM3->CONTROLS[0].CnV = red;
 	FTM3->CONTROLS[1].CnV = green;

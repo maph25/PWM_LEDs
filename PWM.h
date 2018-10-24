@@ -66,7 +66,7 @@ void FTM3_ISR();
 
 void PWM_channel_value(sint16 red, sint16 green, sint16 blue );
 
-void RGB_init();
+void PWM_init();
 
 
 #endif /* PWM_H_ */
