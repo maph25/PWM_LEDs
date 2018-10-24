@@ -90,7 +90,7 @@ void ADC_init (void){
 		 {
 
 	 	 }
-		 else if((ADC_BABY_BLUE < adcTemporal) && (adcTemporal < ADC_PURPLE))
+		 else if((ADC_BABY_BLUE < adcTemporalc) && (adcTemporal < ADC_PURPLE))
 	 	 {
 
 	 	 }

@@ -9,9 +9,7 @@
 #define MANUAL_H_
 
 
-
-
-int Manual(void);
+void Manual(void);
 
 uint32_t Manual_get_element(void);
 

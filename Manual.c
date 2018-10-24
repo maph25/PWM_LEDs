@@ -16,9 +16,8 @@
 
 uint16_t Button;
 uint16_t member;
-uint16_t StateButton;
 uint8_t Data;
-uint32_t statusFlagManual;
+
 static uint8_t B0; /*port c pin 5*/
 static uint8_t B1; /*port c pin 7*/
 static uint8_t B2; /*port c pin 0*/
@@ -41,7 +40,7 @@ uint32_t Manual_decode (uint32_t reading){
 
 		if(port_value == SW2_MASK)
 		{
-			SW2 = TRUE;
+			SW2 = SW2_MASK;
 			return SW2;
 		}
 		else if(port_value == B0_MASK )
@@ -83,19 +82,13 @@ uint32_t Manual_decode (uint32_t reading){
 			return 0xFF; /*Change magic number, only for checking*/
 }
 
-
-
-int Manual(void)
+void Manual(void)
 {
 	sint16 red=0;
 	sint16 green=0;
 	sint16 blue=0;
 
-
-
-	LCD_nokia_goto_xy(25,2);
 	Data = GPIO_get_flag_c();
-	StateButton = ONE;
 
 	if(Data == TRUE){
 	member = Manual_get_element();
@@ -169,11 +162,6 @@ int Manual(void)
 				delay(20000);
 			}
 
-			}
 		}
-
-
-
-
-	return 0;
+	}
 }
