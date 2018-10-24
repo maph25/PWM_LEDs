@@ -6,34 +6,24 @@
  */
 
 
-
-/**
-	\file
-	\brief
-		This project shows how to configure FlexTimer in PWM mode.
-	\author J. Luis Pizano Escalante, luispizano@iteso.mx
-	\date	7/09/2014
-	    Add configuration structures.
- */
-
-
 #include "MK64F12.h" /* include peripheral declarations */
 #include "GPIO.h"
 #include "Manual.h"
 #include "NVIC.h"
 #include "PWM.h"
 #include "Delay.h"
+#include "LCD_nokia.h"
 
 uint8_t Button;
 uint8_t member;
-uint8_t StateButton;
+uint16_t StateButton;
 uint8_t Data;
 uint32_t statusFlagManual;
 static uint8_t B0; /*port c pin 5*/
 static uint8_t B1; /*port c pin 7*/
 static uint8_t B2; /*port c pin 0*/
-static uint8_t B3; /*port c pin 9*/
-static uint8_t B4; /*port c pin 8*/
+static uint16_t B3; /*port c pin 9*/
+static uint16_t B4; /*port c pin 8*/
 static uint8_t B5; /*port c pin 3*/
 static uint8_t B6; /*port c pin 2*/
 static uint8_t SW2;
@@ -94,17 +84,21 @@ uint32_t Manual_decode (uint32_t reading){
 }
 
 
-
+/*
 void Manual_comp_butt(void){
 	LCD_nokia_goto_xy(25,2);
 	Data = GPIO_get_flag_c();
 	StateButton = ONE;
+	if(Data == TRUE){
+		member = Manual_get_element();
+		Button = Manual_decode(member);
+	}
 
-	switch(StateButton)
+	//switch(StateButton)
 	{
 		case B0_MASK:
 		{
-			if(DataAvailable == TRUE)
+
 			{
 				member = Manual_get_element();
 				Button = Manual_decode(member);
@@ -113,7 +107,7 @@ void Manual_comp_butt(void){
 		}
 		case B1_MASK:
 		{
-			if(DataAvailable == TRUE)
+			if(Data == TRUE)
 			{
 				member = Manual_get_element();
 				Button = Manual_decode(member);
@@ -121,7 +115,7 @@ void Manual_comp_butt(void){
 		}
 		case B2_MASK:
 		{
-			if(DataAvailable == TRUE)
+			if(Data == TRUE)
 			{
 				member = Manual_get_element();
 				Button = Manual_decode(member);
@@ -129,7 +123,7 @@ void Manual_comp_butt(void){
 		}
 		case B3_MASK:
 		{
-			if(DataAvailable == TRUE)
+			if(Data == TRUE)
 			{
 				member = Manual_get_element();
 				Button = Manual_decode(member);
@@ -137,7 +131,7 @@ void Manual_comp_butt(void){
 		}
 		case B4_MASK:
 		{
-			if(DataAvailable == TRUE)
+			if(Data == TRUE)
 			{
 				member = Manual_get_element();
 				Button = Manual_decode(member);
@@ -145,7 +139,7 @@ void Manual_comp_butt(void){
 		}
 		case B5_MASK:
 		{
-			if(DataAvailable == TRUE)
+			if(Data == TRUE)
 			{
 				member = Manual_get_element();
 				Button = Manual_decode(member);
@@ -153,7 +147,7 @@ void Manual_comp_butt(void){
 		}
 		case B6_MASK:
 		{
-			if(DataAvailable == TRUE)
+			if(Data == TRUE)
 			{
 				member = Manual_get_element();
 				Button = Manual_decode(member);
@@ -163,7 +157,7 @@ void Manual_comp_butt(void){
 
 }
 
-
+*/
 
 
 
@@ -171,34 +165,144 @@ void Manual_comp_butt(void){
 
 int Manual(void)
 {
-	sint16 dutyCycle=0;
-	uint8 inputValueA=0,inputPortC = 0;
-	GPIO_pinControlRegisterType	pinControlRegisterPORTA = GPIO_MUX1|GPIO_PE|GPIO_PS;
-	GPIO_pinControlRegisterType	pinControlRegisterPORTC6 = GPIO_MUX1|GPIO_PE|GPIO_PS;
-	/**Clock gating for port A and C*/
-    SIM->SCGC5 |= GPIO_CLOCK_GATING_PORTA|GPIO_CLOCK_GATING_PORTC;
-   	PORTC->PCR[1]   = PORT_PCR_MUX(0x4);
-	/**Pin control register configuration for GPIO*/
-	PORTA->PCR[BIT4] = pinControlRegisterPORTA;
-	PORTC->PCR[BIT6] = pinControlRegisterPORTC6;
-	/**Pin 4 and pin 6 of port A and C, respectively as inputs*/
-	GPIOA->PDDR &= ~(BIT4);
-	GPIOC->PDDR &= ~(BIT6);
+	sint16 red=0;
+	sint16 green=0;
+	sint16 blue=0;
+	uint8_t inputValueA;  //SW3
+	uint8_t inputValueB0 = 0; //C5
+	uint8_t inputValueB1 = 0; //C7
+	uint8_t inputValueB2 = 0; //C0
+	uint16_t inputValueB3 = 0; //C9
+	uint16_t inputValueB4; //C8
+	uint8_t inputValueB5 = 0; //C3
+	uint8_t inputValueB6 = 0; //C2
+	uint8_t inputValueC = 0;  //SW2
+
+
+	LCD_nokia_goto_xy(25,2);
+	Data = GPIO_get_flag_c();
+	StateButton = ONE;
+
+	if(Data == TRUE){
+	member = Manual_get_element();
+	Button = Manual_decode(member);
+
+		switch(Button){
+			case B1_MASK:
+			{
+				red = red-10;
+				blue = blue;
+				green = green;
+				if(red<0){
+					red = 0;
+				}
+				PWM_channel_value(red, green, blue);
+				delay(20000);
+			}
+			case B2_MASK:
+			{
+				red = red+10;
+				blue = blue;
+				green = green;
+				if(red>255){
+					red = 255;
+				}
+				PWM_channel_value(red, green, blue);
+				delay(20000);
+			}
+			case B3_MASK:
+			{
+				red = red;
+				blue = blue-10;
+				green = green;
+				if(blue<0){
+					blue = 0;
+				}
+				PWM_channel_value(red, green, blue);
+				delay(20000);
+			}
+			case B4_MASK:
+			{
+				red = red;
+				blue = blue+10;
+				green = green;
+				if(blue>255){
+					red = 255;
+				}
+				PWM_channel_value(red, green, blue);
+				delay(20000);
+			}
+			case B5_MASK:
+			{
+				red = red;
+				blue = blue;
+				green = green-10;
+				if(green<0){
+					green = 0;
+				}
+				PWM_channel_value(red, green, blue);
+				delay(20000);
+			}
+			case B6_MASK:
+			{
+				red = red;
+				blue = blue;
+				green = green+10;
+				if(green>255){
+					green = 255;
+				}
+				PWM_channel_value(red, green, blue);
+				delay(20000);
+			}
+
+			}
+		}
+
 	/**Configuration function for FlexTimer*/
-	PWM_init();
+	//PWM_init( red, green, blue);
 
 	for(;;) {
 		/**Reading the input values for port A and C*/
-		inputPortC = GPIOC->PDIR;
-		inputPortC &=(0x40);
-		inputPortC = inputPortC >> 6;
 		inputValueA = GPIOA->PDIR;
 		inputValueA &=(0x10);
-		inputValueA = inputValueA >> 4;
+		inputValueA = inputValueA >> 4;  //SW3
 
+		inputValueC = GPIOC->PDIR;
+		inputValueC &=(0x40);
+		inputValueC = inputValueC >> 6;   //SW2
+
+		inputValueB0 = GPIOC->PDIR;
+		inputValueB0 &=(B0_MASK); 			//CAMBIAR VALOR
+		inputValueB0 = inputValueB0 >> 5; //B0
+
+		inputValueB1 = GPIOC->PDIR;
+		inputValueB1 &=(B1_MASK); 			//CAMBIAR VALOR
+		inputValueB1 = inputValueB1 >> 7; //B1
+
+		inputValueB2 = GPIOC->PDIR;
+		inputValueB2 &=(B2_MASK); 			//CAMBIAR VALOR
+		inputValueB2 = inputValueB2 >> 0; //B2
+
+		inputValueB3 = GPIOC->PDIR;
+		inputValueB3 &=(B3_MASK); 			//CAMBIAR VALOR
+		inputValueB3 = inputValueB3 >> 9; //B3
+
+		inputValueB4 = GPIOC->PDIR;
+		inputValueB4 &=(B4_MASK); 			//CAMBIAR VALOR
+		inputValueB4 = inputValueB4 >> 8; //B4
+
+		inputValueB5 = GPIOC->PDIR;
+		inputValueB5 &=(B5_MASK); 			//CAMBIAR VALOR
+		inputValueB5 = inputValueB5 >> 3; //B5
+
+		inputValueB6 = GPIOC->PDIR;
+		inputValueB6 &=(B6_MASK); 			//CAMBIAR VALOR
+		inputValueB6 = inputValueB6 >> 2; //B6
+
+		/*
 		if(inputValueA ==0)
 		{
-
+			dutyCycle = dutyCycle-10;
 			FlexTimer_updateCHValue(dutyCycle);
 			delay(20000);
 		}
@@ -207,7 +311,64 @@ int Manual(void)
 			dutyCycle = dutyCycle-10;
 			FlexTimer_updateCHValue(dutyCycle);
 			delay(20000);
+		}*/
+
+		if(inputValueB0==B0_MASK)
+		{
+
 		}
+
+		if(BUTTON==B1_MASK)
+		{
+			red = red-10;
+			blue = blue;
+			green = green;
+			PWM_channel_value(red, green, blue);
+			delay(20000);
+		}
+
+		if(inputValueB2==B2_MASK)
+		{
+			red = red+10;
+			blue = blue;
+			green = green;
+			PWM_channel_value(red, green, blue);
+			delay(20000);
+		}
+		if(inputValueB3==B3_MASK)
+		{
+			red = red;
+			blue = blue-10;
+			green = green;
+			PWM_channel_value(red, green, blue);
+			delay(20000);
+		}
+		if(inputValueB4==B4_MASK)
+		{
+			red = red;
+			blue = blue+10;
+			green = green;
+			PWM_channel_value(red, green, blue);
+			delay(20000);
+		}
+		if(inputValueB5==B5_MASK)
+		{
+			red = red;
+			blue = blue;
+			green = green-10;
+			PWM_channel_value(red, green, blue);
+			delay(20000);
+		}
+		if(inputValueB6==B6_MASK)
+		{
+			red = red;
+			blue = blue;
+			green = green+10;
+			PWM_channel_value(red, green, blue);
+			delay(20000);
+		}
+
+
 
 	}
 
