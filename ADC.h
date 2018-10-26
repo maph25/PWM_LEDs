@@ -8,7 +8,24 @@
 #ifndef ADC_H_
 #define ADC_H_
 
+
 #include "DataTypeDefinitions.h"
+/*Values for print*/
+#define ONE (1u)
+#define TWO (2u)
+#define THREE (3u)
+#define FOUR (4u)
+#define FIVE (5u)
+#define SIX (6u)
+#define SEVEN (7u)
+#define EIGHT (8u)
+#define NINE (9u)
+
+/*Dividers for printing*/
+#define ADC_DIVIDER_ONE (100u)
+#define ADC_DIVIDER_TWO (10u)
+#define ADC_MAX (255U)
+#define ADC_VOLT_MAX (3.3f)
 /*Ph colors*/
 #define ADC_NULL (0u)
 /*Red*/
@@ -36,5 +53,6 @@
 void ADC (void);
 uint16 ADC_result();
 void ADC_execute(void);
+void ADC_decode_print_value(uint16 value);
 
 #endif /* ADC_H_ */

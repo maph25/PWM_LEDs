@@ -61,5 +61,8 @@ typedef unsigned long int uint32;
 /*! This data type is 16-bit signed integer*/
 typedef long int sint32;
 
+/*Float variable 16-bits*/
+typedef float ufloat;
+
 
 #endif /* DATATYPEDEFINITIONS_H_ */
