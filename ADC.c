@@ -19,8 +19,8 @@ sint16 Red;
 sint16 Green;
 sint16 Blue;
 ufloat adcPrint;
-ufloat adcPrintStage1;
-uint16 adcPrintStage2;
+ufloat adcPrintStage1; /*Float variable*/
+uint16 adcPrintStage2; /*Float variable*/
 uint16 adcPrintStage3;
 uint16 printCharOne;
 uint16 printCharTwo;

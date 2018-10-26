@@ -8,9 +8,9 @@
 #ifndef ADC_H_
 #define ADC_H_
 
-
 #include "DataTypeDefinitions.h"
-/*Values for print*/
+
+/*Values for print comparation*/
 #define ONE (1u)
 #define TWO (2u)
 #define THREE (3u)
