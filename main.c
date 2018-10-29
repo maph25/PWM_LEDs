@@ -1,67 +1,133 @@
-/*
- * Copyright 2016-2018 NXP Semiconductor, Inc.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification,
- * are permitted provided that the following conditions are met:
- *
- * o Redistributions of source code must retain the above copyright notice, this list
- *   of conditions and the following disclaimer.
- *
- * o Redistributions in binary form must reproduce the above copyright notice, this
- *   list of conditions and the following disclaimer in the documentation and/or
- *   other materials provided with the distribution.
- *
- * o Neither the name of NXP Semiconductor, Inc. nor the names of its
- *   contributors may be used to endorse or promote products derived from this
- *   software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
- * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
- * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
- 
 /**
  * @file    Practica_dos.c
  * @brief   Application entry point.
  */
-#include <stdio.h>
-#include "board.h"
-#include "peripherals.h"
-#include "pin_mux.h"
-#include "clock_config.h"
-#include "MK64F12.h"
-#include "fsl_debug_console.h"
-/* TODO: insert other include files here. */
+#include "ADC.h"
+#include "DataTypeDefinitions.h"
+#include "Sequence.h"
+#include "Manual.h"
+#include "GPIO.h"
+#include "Botones.h"
+#include "PWM.h"
+#include "SPI.h"
+#include "LCD_nokia.h"
+#include "Delay.h"
+#include "SCREEN_init.c"
 
-/* TODO: insert other definitions and declarations here. */
+/*General definitions*/
+#define RGB_ON (255u)
+#define RGB_OFF (0u)
+/*Variable declaration*/
+uint16_t menuOption;
+uint16_t Button;
+uint8_t DataAvailable;
+static uint8_t B0; /*port c pin 5*/
+static uint8_t B1; /*port c pin 7*/
+static uint8_t B2; /*port c pin 0*/
+static uint16_t B3; /*port c pin 9*/
+static uint16_t B4; /*port c pin 8*/
+static uint8_t B5; /*port c pin 3*/
+static uint8_t B6; /*port c pin 2*/
+static uint8_t SW2;
 
-/*
- * @brief   Application entry point.
- */
-int main(void) {
-
-  	/* Init board hardware. */
-    BOARD_InitBootPins();
-    BOARD_InitBootClocks();
-    BOARD_InitBootPeripherals();
-  	/* Init FSL debug console. */
-    BOARD_InitDebugConsole();
-
-    PRINTF("Hello World\n");
-
-    /* Force the counter to be placed into memory. */
-    volatile static int i = 0 ;
-    /* Enter an infinite loop, just incrementing a counter. */
-    while(1) {
-        i++ ;
-    }
-    return 0 ;
+uint32 Menu_get_element(void)
+{
+	return GPIO_read_port(GPIO_C);
 }
+
+uint32 Menu_decode (uint32 reading){
+	uint32_t port_value;
+		port_value = GPIOC->PDIR;
+		/*Value decoded was SW2*/
+		if(port_value == SW2_MASK)
+		{
+			SW2 = SW2_MASK;
+			return SW2;
+		}
+		/*Value decoded was B0*/
+		else if(port_value == B0_MASK)
+			{
+				B0 = B0_MASK;
+				return B0;
+			}
+		/*Value decoded was B1*/
+		else if(port_value == B1_MASK)
+			{
+				B1 = B1_MASK;
+				return B1;
+			}
+		/*Value decoded was B2*/
+		else if(port_value == B2_MASK)
+			{
+				B2 = B2_MASK;
+				return B2;
+			}
+		/*Value decoded was B3*/
+		else if(port_value == B3_MASK)
+			{
+				B3 = B3_MASK;
+				return B3;
+			}
+		/*Value decoded was B4*/
+		else if(port_value == B4_MASK )
+			{
+				B4 = B4_MASK;
+				return B4;
+			}
+		/*None of the above was selected*/
+		else
+			return 0xFF; /*Change magic number, only for checking*/
+}
+
+int main(void) {
+	/*General initializations*/
+	ADC_init();
+	LCD_nokia_init();
+	SPI_init();
+	Button_init();
+	PWM_init();
+
+    while(1) {
+    	/*Show initial message*/
+    	Screen();
+    	/*Turn on every color RGB LED*/
+    	/*Red*/
+    	PWM_channel_value(RGB_ON, RGB_OFF, RGB_OFF );
+    	delay(2000);
+    	/*Green*/
+    	PWM_channel_value(RGB_OFF, RGB_ON, RGB_OFF );
+    	delay(2000);
+    	/*Blue*/
+		PWM_channel_value( RGB_OFF, RGB_OFF, RGB_ON );
+		delay(2000);
+		/*Print menu*/
+    	DataAvailable = GPIO_get_flag_c();
+    	if(DataAvailable == TRUE){
+    		Button = Menu_get_element(); /*Saves lecture of interruption*/
+    		menuOption = Menu_decode(Button); /*Decodes interruptin being made*/
+    		switch(menuOption){
+    		/*Enter to manual module*/
+    			case B1_MASK:
+    				Manual();
+    				break;
+    		/*Enter to ADC module*/
+    			case B2_MASK:
+    				ADC_execute();
+    				break;
+    		/*Enter to sequence module*/
+    			case B3_MASK:
+    				SEQ_execute();
+    				break;
+    		/*Enter to frequence module*/
+    			case B4_MASK:
+    				break;
+    		/*None of the above was selected*/
+    			default:
+    				break;
+    		}/*Switch*/
+    	}
+    	return 0 ;
+    } /*While*/
+
+
+} /*Main*/
