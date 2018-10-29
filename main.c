@@ -12,22 +12,19 @@
 #include "SPI.h"
 #include "LCD_nokia.h"
 #include "Delay.h"
-#include "SCREEN_init.c"
 
 /*General definitions*/
 #define RGB_ON (255u)
 #define RGB_OFF (0u)
 /*Variable declaration*/
 uint16_t menuOption;
-uint16_t Button;
-uint8_t DataAvailable;
+uint16_t MainButton;
+uint8_t MainDataAvailable;
 static uint8_t B0; /*port c pin 5*/
 static uint8_t B1; /*port c pin 7*/
 static uint8_t B2; /*port c pin 0*/
 static uint16_t B3; /*port c pin 9*/
 static uint16_t B4; /*port c pin 8*/
-static uint8_t B5; /*port c pin 3*/
-static uint8_t B6; /*port c pin 2*/
 static uint8_t SW2;
 
 uint32 Menu_get_element(void)
@@ -83,7 +80,6 @@ int main(void) {
 	/*General initializations*/
 	ADC_init();
 	LCD_nokia_init();
-	SPI_init();
 	Button_init();
 	PWM_init();
 
@@ -101,10 +97,10 @@ int main(void) {
 		PWM_channel_value( RGB_OFF, RGB_OFF, RGB_ON );
 		delay(2000);
 		/*Print menu*/
-    	DataAvailable = GPIO_get_flag_c();
-    	if(DataAvailable == TRUE){
-    		Button = Menu_get_element(); /*Saves lecture of interruption*/
-    		menuOption = Menu_decode(Button); /*Decodes interruptin being made*/
+    	MainDataAvailable = GPIO_get_flag_c();
+    	if(MainDataAvailable == TRUE){
+    		MainButton = Menu_get_element(); /*Saves lecture of interruption*/
+    		menuOption = Menu_decode(MainButton); /*Decodes interruptin being made*/
     		switch(menuOption){
     		/*Enter to manual module*/
     			case B1_MASK:

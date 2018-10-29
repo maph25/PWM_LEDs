@@ -28,13 +28,13 @@ static uint8_t B6; /*port c pin 2*/
 static uint8_t SW2;
 
 /*inicialización de los botones en el manual*/
-uint32_t Manual_get_element(void)
+uint32 Manual_get_element(void)
 {
 	return GPIO_read_port(GPIO_C);
 }
 
 /*recibe los botones en el manual*/
-uint32_t Manual_decode (uint32_t reading){
+uint32 Manual_decode (uint32 reading){
 	uint32_t port_value;
 		port_value = GPIOC->PDIR;
 

@@ -29,7 +29,7 @@
 
 uint32 SEQ_decode (uint32 reading);
 uint32 SEQ_get_element(void);
-void SEQ_save_seq(void);
+void SEQ_execute(void);
 
 
 #endif /* SEQUENCE_H_ */

@@ -50,7 +50,7 @@
 #define ADC_PURPLE (255u)
 
 
-void ADC (void);
+void ADC_init(void);
 uint16 ADC_result();
 void ADC_execute(void);
 void ADC_decode_print_value(uint16 value);

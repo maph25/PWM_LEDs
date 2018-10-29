@@ -23,6 +23,6 @@
 
 void Button_init(void);
 
-void Buttons_set(void);
+
 
 #endif /* BOTONES_H_ */
