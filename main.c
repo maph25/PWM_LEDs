@@ -12,11 +12,16 @@
 #include "SPI.h"
 #include "LCD_nokia.h"
 #include "Delay.h"
+#include "Frequency.h"
 
 /*General definitions*/
 #define RGB_ON (255u)
 #define RGB_OFF (0u)
 /*Variable declaration*/
+uint8_t string1[]="1) Manual"; /*! String to be printed in the LCD*/
+uint8_t string2[]="2) ADC"; /*! String to be printed in the LCD*/
+uint8_t string3[]="3) Sequence"; /*! String to be printed in the LCD*/
+uint8_t string4[]="4) Frequency"; /*! String to be printed in the LCD*/
 uint16_t menuOption;
 uint16_t MainButton;
 uint8_t MainDataAvailable;
@@ -77,15 +82,17 @@ uint32 Menu_decode (uint32 reading){
 }
 
 int main(void) {
-	/*General initializations*/
-	ADC_init();
-	LCD_nokia_init();
-	Button_init();
-	PWM_init();
 
     while(1) {
+    	/*General initializations*/
+    	Button_init();
+    	LCD_nokia_init();
+		ADC_init();
+		PWM_init();
+		singleCapture();
     	/*Show initial message*/
-    	Screen();
+    	LCD_screen();
+    	LCD_nokia_clear();
     	/*Turn on every color RGB LED*/
     	/*Red*/
     	PWM_channel_value(RGB_ON, RGB_OFF, RGB_OFF );
@@ -97,6 +104,14 @@ int main(void) {
 		PWM_channel_value( RGB_OFF, RGB_OFF, RGB_ON );
 		delay(2000);
 		/*Print menu*/
+		LCD_nokia_goto_xy(10,1);
+		LCD_nokia_send_string(string1); /*! It print a string stored in an array*/
+		LCD_nokia_goto_xy(20,1);
+		LCD_nokia_send_string(string2); /*! It print a string stored in an array*/
+		LCD_nokia_goto_xy(30,1);
+		LCD_nokia_send_string(string3); /*! It print a string stored in an array*/
+		LCD_nokia_goto_xy(40,1);
+		LCD_nokia_send_string(string4); /*! It print a string stored in an array*/
     	MainDataAvailable = GPIO_get_flag_c();
     	if(MainDataAvailable == TRUE){
     		MainButton = Menu_get_element(); /*Saves lecture of interruption*/

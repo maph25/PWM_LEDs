@@ -12,6 +12,11 @@ void Button_init(void){
 	/*configuracion del pcr*/
 	gpio_pin_control_register_t input_intr_config = GPIO_MUX1 | GPIO_PE | GPIO_PS | INTR_FALLING_EDGE;
 
+	/*Clock gating*/
+	GPIO_clock_gating(GPIO_C);
+	GPIO_clock_gating(GPIO_A);
+	GPIO_clock_gating(GPIO_D);
+
 	/*configuracion de los pines en el pcr*/
 	GPIO_pin_control_register(GPIO_A, BIT4, &input_intr_config); //SW3
 

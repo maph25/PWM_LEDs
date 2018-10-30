@@ -19,6 +19,8 @@
 #define LCD_CMD 0
 #define DATA_OR_CMD_PIN 3
 #define RESET_PIN 0
+/*Writes welcome mesage on screen*/
+void LCD_screen(void);
 /*It configures the LCD*/
 void LCD_nokia_init(void);
 /*It writes a byte in the LCD memory. The place of writting is the last place that was indicated by LCDNokia_gotoXY. In the reset state

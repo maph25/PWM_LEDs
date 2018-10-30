@@ -25,7 +25,7 @@ uint16 adcPrintStage3;
 uint16 printCharOne;
 uint16 printCharTwo;
 uint16 printCharThree;
-uint8_t string1[]="RGB ADC Voltage"; /*! String to be printed in the LCD*/
+uint8_t ADCstring1[]="RGB ADC Voltage"; /*! String to be printed in the LCD*/
 
 /*Port C Pin 10: ADC1_SE6b */
 
@@ -105,7 +105,7 @@ void ADC_decode_print_value(uint16 value){
 	 printCharTwo = adcPrintStage3 / ADC_DIVIDER_TWO;/*Divides by 10 remaining value*/
 	 printCharThree = printCharTwo - (printCharTwo * ADC_DIVIDER_TWO); /*Substract second char*/
 	 LCD_nokia_goto_xy(25,0); /*! It establishes the position to print the messages in the LCD*/
-	 LCD_nokia_send_string(&string1[0]); /*! It print a string stored in an array*/
+	 LCD_nokia_send_string(&ADCstring1[0]); /*! It print a string stored in an array*/
 	 LCD_nokia_goto_xy(0,10); /*! It establishes the position to print the messages in the LCD*/
 	 ADC_decode_print_value(printCharOne);
 	 LCD_nokia_goto_xy(8,10); /*! It establishes the position to print the messages in the LCD*/

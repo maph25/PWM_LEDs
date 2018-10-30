@@ -114,7 +114,7 @@ static const uint8_t ASCII[][5] =
 ,{0x78, 0x46, 0x41, 0x46, 0x78} // 7f
 };
 
-void Screen(void)
+void LCD_screen(void)
 {
 	/** \brief This is the configuration structure to configure the LCD.
 	 * Note that is constants and it is because is only a variable used for configuration*/
