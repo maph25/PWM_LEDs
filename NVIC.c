@@ -12,17 +12,34 @@
 
 #include "NVIC.h"
 
-void NVIC_enableInterruptAndPriotity(InterruptType interruptNumber, PriorityLevelType priority)
+void NVIC_priorities()
+{
+	/*Interrupt habilitation*/
+	/**Sets the threshold for interrupts, if the interrupt has higher priority constant that the BASEPRI, the interrupt will not be attended*/
+	NVIC_set_basepri_threshold(PRIORITY_6);
+
+	/*Enables and sets a particular interrupt and its priority*/
+	NVIC_enable_interrupt_and_priotity(PIT_CH0_IRQ, PRIORITY_6);
+	NVIC_enable_interrupt_and_priotity(PIT_CH1_IRQ, PRIORITY_5);
+	NVIC_enable_interrupt_and_priotity(PIT_CH2_IRQ, PRIORITY_4);
+	NVIC_enable_interrupt_and_priotity(PORTC_IRQ, PRIORITY_3);
+	NVIC_enable_interrupt_and_priotity(PORTA_IRQ, PRIORITY_2);
+	NVIC_enable_interrupt_and_priotity(PORTB_IRQ, PRIORITY_1);
+	/*Enables all interruptions*/
+	NVIC_global_enable_interrupts;
+}
+
+void NVIC_enable_interrupt_and_priotity(interrupt_t interrupt_number, priority_level_t priority)
 {
 	/**This functions are part of CMSIS Core functions*/
 	/**It enables the IRQ*/
-	NVIC_EnableIRQ(interruptNumber);
+	NVIC_EnableIRQ(interrupt_number);
 	/**It Sets the priority of the IRQ*/
-	NVIC_SetPriority(interruptNumber, priority);
+	NVIC_SetPriority(interrupt_number, priority);
 }
 
 
-void NVIC_setBASEPRI_threshold(PriorityLevelType priority)
+void NVIC_set_basepri_threshold(priority_level_t priority)
 {
 	/**Sets the threshold level to attend interrupts*/
 	/**A shift is needed to align in a correct manner the data in priority inside BASEPRI register*/

@@ -1,3 +1,4 @@
+
 /**
 	\file PWM.h
 	\brief
@@ -10,7 +11,8 @@
 #define PWM_H_
 
 #include "MK64F12.h"
-#include "DataTypeDefinitions.h"
+#include "GPIO.h"
+#include "bits.h"
 
 
 #define FLEX_TIMER_0_CLOCK_GATING 0x01000000
@@ -62,10 +64,18 @@
 #define  FLEX_TIMER_CHIE  0x40
 #define  FLEX_TIMER_CHF   0x80
 
-void FTM3_ISR();
+/*LED pins*/
+#define PWM_LED_PORT GPIO_D
+/*LED ports*/
+#define PWM_RED_PIN bit_0
+#define PWM_GREEN_PIN bit_1
+#define PWM_BLUE_PIN bit_2
 
-void PWM_channel_value(sint16 red, sint16 green, sint16 blue );
-
+/*Initialization of LEDs pins*/
+void PWM_leds(void);
+/*Function to update channel value*/
+void PWM_channel_value(uint16_t red, uint16_t green, uint16_t blue );
+/*FlexTimer initialization*/
 void PWM_init();
 
 

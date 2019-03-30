@@ -1,17 +1,17 @@
-/*
- * LCD_nokia.h
- *
- *  Created on: Oct 15, 2018
- *      Author: Fer Muñoz & Andrea Perez
- */
+
 
 #ifndef LCD_NOKIA_H_
 #define LCD_NOKIA_H_
 
 #include "stdint.h"
+#include "MK64F12.h"
 
-#define SCREENW 84
-#define SCREENH 48
+#include "bits.h"
+#include "GPIO.h"
+#include "SPI.h"
+
+#define SCREENW 84u
+#define SCREENH 48u
 
 #define LCD_X 84
 #define LCD_Y 48
@@ -19,8 +19,7 @@
 #define LCD_CMD 0
 #define DATA_OR_CMD_PIN 3
 #define RESET_PIN 0
-/*Writes welcome mesage on screen*/
-void LCD_screen(void);
+
 /*It configures the LCD*/
 void LCD_nokia_init(void);
 /*It writes a byte in the LCD memory. The place of writting is the last place that was indicated by LCDNokia_gotoXY. In the reset state
@@ -39,5 +38,7 @@ void LCD_nokia_send_char(uint8_t);
 void LCD_nokia_send_string(uint8_t string []);
 /*It used in the initialization routine*/
 void LCD_nokia_delay(void);
+
+
 
 #endif /* LCD_NOKIA_H_ */

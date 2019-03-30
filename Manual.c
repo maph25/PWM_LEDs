@@ -1,167 +1,99 @@
 /*
- * Manual.c
+ * Manual.h
  *
- *  Created on: 23/10/2018
- *      Author: Fer Muñoz
+ *  Created on: Mar 25, 2019
+ *      Author: Andy
  */
 
-
-#include "MK64F12.h" /* include peripheral declarations */
-#include "GPIO.h"
 #include "Manual.h"
-#include "NVIC.h"
-#include "PWM.h"
-#include "Delay.h"
-#include "LCD_nokia.h"
 
-uint16_t Button;
-uint16_t member;
-uint8_t Data;
+/*Variables for modifying channel value*/
+uint16_t red_manual = MANUAL_START_VALUE;
+uint16_t green_manual = MANUAL_START_VALUE;
+uint16_t blue_manual = MANUAL_START_VALUE;
 
-static uint8_t B0; /*port c pin 5*/
-static uint8_t B1; /*port c pin 7*/
-static uint8_t B2; /*port c pin 0*/
-static uint16_t B3; /*port c pin 9*/
-static uint16_t B4; /*port c pin 8*/
-static uint8_t B5; /*port c pin 3*/
-static uint8_t B6; /*port c pin 2*/
-static uint8_t SW2;
-
-/*inicialización de los botones en el manual*/
-uint32 Manual_get_element(void)
+void Manual_ch_manualange_value()
 {
-	return GPIO_read_port(GPIO_C);
-}
+	uint8_t flag;
+	uint32_t option;
+	flag = GPIO_get_interrupt_status(BUTTONS_PORT);
 
-/*recibe los botones en el manual*/
-uint32 Manual_decode (uint32 reading){
-	uint32_t port_value;
-		port_value = GPIOC->PDIR;
-
-		if(port_value == SW2_MASK)
+	if(TRUE == flag)
+	{
+		option = Buttons_decode();
+		switch(option)
 		{
-			SW2 = SW2_MASK;
-			return SW2;
-		}
-		else if(port_value == B0_MASK )
-			{
-				B0 = B0_MASK;
-				return B0;
-			}
-		else if(port_value == B1_MASK )
-			{
-				B1 = B1_MASK;
-				return B1;
-			}
-		else if(port_value == B2_MASK )
-			{
-				B2 = B2_MASK;
-				return B2;
-			}
-		else if(port_value == B3_MASK )
-			{
-				B3 = B3_MASK;
-				return B3;
-			}
-		else if(port_value == B4_MASK )
-			{
-				B4 = B4_MASK;
-				return B4;
-			}
-		else if(port_value == B5_MASK )
-			{
-				B5 = B5_MASK;
-				return B5;
-			}
-		else if(port_value == B6_MASK )
-			{
-				B6 = B6_MASK;
-				return B6;
-			}
-		else
-			return 0xFF; /*Change magic number, only for checking*/
-}
-
-void Manual(void)
-{
-	sint16 red=0;
-	sint16 green=0;
-	sint16 blue=0;
-
-	Data = GPIO_get_flag_c();
-
-	if(Data == TRUE){
-	member = Manual_get_element();
-	Button = Manual_decode(member);
-
-		switch(Button){
 			case B1_MASK:
 			{
-				red = red-10;
-				blue = blue;
-				green = green;
-				if(red<0){
-					red = 0;
-				}
-				PWM_channel_value(red, green, blue);
-				delay(20000);
+				if(blue_manual >= MANUAL_MAX_OUTPUT)
+					blue_manual = MANUAL_MAX_OUTPUT;
+				else
+					blue_manual = blue_manual + MANUAL_OUTPUT;
 			}
+			break;
 			case B2_MASK:
 			{
-				red = red+10;
-				blue = blue;
-				green = green;
-				if(red>255){
-					red = 255;
-				}
-				PWM_channel_value(red, green, blue);
-				delay(20000);
+				if(blue_manual <= MANUAL_MIN_OUTPUT)
+					blue_manual = MANUAL_MIN_OUTPUT;
+				else
+					blue_manual = blue_manual - MANUAL_OUTPUT;
 			}
+			break;
 			case B3_MASK:
 			{
-				red = red;
-				blue = blue-10;
-				green = green;
-				if(blue<0){
-					blue = 0;
-				}
-				PWM_channel_value(red, green, blue);
-				delay(20000);
+				if(red_manual >= MANUAL_MAX_OUTPUT)
+					red_manual = MANUAL_MAX_OUTPUT;
+				else
+					red_manual = red_manual + MANUAL_OUTPUT;
 			}
+			break;
 			case B4_MASK:
 			{
-				red = red;
-				blue = blue+10;
-				green = green;
-				if(blue>255){
-					red = 255;
-				}
-				PWM_channel_value(red, green, blue);
-				delay(20000);
+				if(red_manual <= MANUAL_MIN_OUTPUT)
+					red_manual = MANUAL_MIN_OUTPUT;
+				else
+					red_manual = red_manual - MANUAL_OUTPUT;
 			}
+			break;
 			case B5_MASK:
 			{
-				red = red;
-				blue = blue;
-				green = green-10;
-				if(green<0){
-					green = 0;
-				}
-				PWM_channel_value(red, green, blue);
-				delay(20000);
+				if(green_manual >= MANUAL_MAX_OUTPUT)
+					green_manual = MANUAL_MAX_OUTPUT;
+				else
+					green_manual = green_manual - MANUAL_OUTPUT;
 			}
+			break;
 			case B6_MASK:
 			{
-				red = red;
-				blue = blue;
-				green = green+10;
-				if(green>255){
-					green = 255;
-				}
-				PWM_channel_value(red, green, blue);
-				delay(20000);
+				if(green_manual <= MANUAL_MIN_OUTPUT)
+					green_manual = MANUAL_MIN_OUTPUT;
+				else
+					green_manual = green_manual - MANUAL_OUTPUT;
 			}
+			break;
+		}/*Switch*/
+		PWM_channel_value(red_manual, green_manual, blue_manual);
+	}/*If*/
 
-		}
+}
+
+void Manual_full()
+{
+	uint8_t flagA;
+	uint8_t flagC;
+
+	flagA = GPIO_get_interrupt_status(BUTTONS_SW3_PORT);
+	flagC = GPIO_get_interrupt_status(BUTTONS_PORT);
+
+	if(TRUE == flagA)
+	{
+		Manual_change_value();
+	}
+	if((TRUE == flagC) & (SW2_MASK == Buttons_decode()))
+	{
+		red_manual = MANUAL_START_VALUE;
+		green_manual = MANUAL_START_VALUE;
+		blue_manual = MANUAL_START_VALUE;
+		PWM_channel_value(red_manual, green_manual, blue_manual);
 	}
 }

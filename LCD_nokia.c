@@ -1,18 +1,11 @@
 /*
  * LCD_nokia.c
  *
- *  Created on: Oct 15, 2018
- *      Author: Fer Muñoz & Andrea Perez
+ *  Created on: Mar 27, 2019
+ *      Author: Andrea Perez Huizar, ie698276@iteso.mx
  */
 
-#include "GPIO.h"
-#include "SPI.h"
-#include "Delay.h"
 #include "LCD_nokia.h"
-#include "stdint.h"
-#include "DataTypeDefinitions.h"
-
-
 
 static const uint8_t ASCII[][5] =
 {
@@ -114,66 +107,22 @@ static const uint8_t ASCII[][5] =
 ,{0x78, 0x46, 0x41, 0x46, 0x78} // 7f
 };
 
-void LCD_screen(void)
+
+void LCD_nokia_init()
 {
-	/** \brief This is the configuration structure to configure the LCD.
-	 * Note that is constants and it is because is only a variable used for configuration*/
-	const spi_config_t g_spi_config = {
-								SPI_DISABLE_FIFO,
-								SPI_LOW_POLARITY,
-								SPI_LOW_PHASE,
-								SPI_MSB,
-								SPI_0,
-								SPI_MASTER,
-								GPIO_MUX2,
-								SPI_BAUD_RATE_2,
-								SPI_FSIZE_8,
-								{GPIO_D, BIT1, BIT2} };
-
-	/*! This array hold the initial picture that is shown in the LCD. Note that extern should be avoided*/
-	extern const uint8_t ITESO[504];
-	uint8_t string1[]="ITESO"; /*! String to be printed in the LCD*/
-	uint8_t string2[]="uMs y DSPs"; /*! String to be printed in the LCD*/
-	SPI_init(&g_spi_config); /*! Configuration function for the LCD port*/
-	LCD_nokia_init(); /*! Configuration function for the LCD */
-
-		for(;;) {
-			LCD_nokia_clear();/*! It clears the information printed in the LCD*/
-			LCD_nokia_bitmap(&ITESO[0]); /*! It prints an array that hold an image, in this case is the initial picture*/
-			delay(65000);
-			LCD_nokia_clear();
-			delay(65000);
-    		LCD_nokia_clear();
-    		LCD_nokia_goto_xy(25,0); /*! It establishes the position to print the messages in the LCD*/
-			LCD_nokia_send_string(&string1[0]); /*! It print a string stored in an array*/
-			delay(65000);
-    		LCD_nokia_goto_xy(10,1);
-			LCD_nokia_send_string(string2); /*! It print a string stored in an array*/
-			delay(65000);
-			LCD_nokia_goto_xy(25,2);
-			LCD_nokia_send_char('2'); /*! It prints a character*/
-			LCD_nokia_send_char('0'); /*! It prints a character*/
-			LCD_nokia_send_char('1'); /*! It prints a character*/
-			LCD_nokia_send_char('8'); /*! It prints a character*/
-			delay(65000);
-		}
-}
-
-void LCD_nokia_init(void) {
 	gpio_pin_control_register_t lcd_port = GPIO_MUX1;
 
-	GPIO_clock_gating(GPIO_D);
-	GPIO_data_direction_pin(GPIO_D,GPIO_OUTPUT, DATA_OR_CMD_PIN);
-	GPIO_pin_control_register(GPIO_D, BIT3, &lcd_port);
+	GPIO_clock_gating(GPIO_A);
+	GPIO_data_direction_pin(GPIO_A, GPIO_OUTPUT, bit_1);
+	GPIO_pin_control_register(GPIO_A, bit_1, &lcd_port);
 
-	GPIO_data_direction_pin(GPIO_D,GPIO_OUTPUT,RESET_PIN);
-	GPIO_pin_control_register(GPIO_D,RESET_PIN,&lcd_port);
+	GPIO_data_direction_pin(GPIO_A, GPIO_OUTPUT, bit_0);
+	GPIO_pin_control_register(GPIO_A, bit_0, &lcd_port);
   //Configure control pins
 
-
-	GPIO_clear_pin(GPIO_D, RESET_PIN);
+	GPIO_clear_pin(GPIO_A, bit_0);
 	LCD_nokia_delay();
-	GPIO_set_pin(GPIO_D, RESET_PIN);
+	GPIO_set_pin(GPIO_A, bit_0);
 
 	LCD_nokia_write_byte(LCD_CMD, 0x21); //Tell LCD that extended commands follow
 	LCD_nokia_write_byte(LCD_CMD, 0xBF); //Set LCD Vop (Contrast): Try 0xB1(good @ 3.3V) or 0xBF if your display is too dark
@@ -190,14 +139,12 @@ void LCD_nokia_bitmap(const uint8_t* my_array){
 	  LCD_nokia_write_byte(LCD_DATA, *(my_array+index));
 }
 
-
-
 void LCD_nokia_write_byte(uint8_t DataOrCmd, uint8_t data)
 {
 	if(DataOrCmd)
-		GPIO_set_pin(GPIO_D, DATA_OR_CMD_PIN);
+		GPIO_set_pin(GPIO_A, bit_1);
 	else
-		GPIO_clear_pin(GPIO_D, DATA_OR_CMD_PIN);
+		GPIO_clear_pin(GPIO_A, bit_1);
 
 	SPI_start_tranference(SPI_0);
 	SPI_send_one_byte(data);
@@ -242,4 +189,3 @@ void LCD_nokia_delay(void)
 
 	}
 }
-

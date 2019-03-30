@@ -8,18 +8,16 @@
 #ifndef NVIC_H_
 #define NVIC_H_
 
-
-#include "DataTypeDefinitions.h"
 #include "MK64F12.h"
 
-#define EnableInterrupts __enable_irq()
-#define DisableInterrupts __disable_irq()
+#define NVIC_global_enable_interrupts __enable_irq()
+#define NVIC_disable_interrupts __disable_irq()
 
 /** enum type that defines the priority levels for the NVIC.
  * The highest priority is PRIORITY_0 and the lowest PRIORITY_15 */
 typedef enum {PRIORITY_0, PRIORITY_1, PRIORITY_2, PRIORITY_3, PRIORITY_4, PRIORITY_5, PRIORITY_6,
 			  PRIORITY_7, PRIORITY_8, PRIORITY_9, PRIORITY_10, PRIORITY_11, PRIORITY_12, PRIORITY_13,
-			  PRIORITY_14, PRIORITY_15 }PriorityLevelType;
+			  PRIORITY_14, PRIORITY_15 } priority_level_t;
 
 /** enum type that defines the IRQs for the NVIC.*/
 typedef enum {
@@ -109,29 +107,34 @@ typedef enum {
 	ETHERNET_MAC1_IRQ, //83
 	ETHERNET_MAC2_IRQ, //84
 	ETHERNET_MAC3_IRQ //85
-} InterruptType;
+} interrupt_t;
 
 /********************************************************************************************/
 /********************************************************************************************/
 /********************************************************************************************/
 /*!
- 	 \brief	 This function enables a IRQ in the NVIC and establishes its priority.
+ 	 \brief	 This function initializes NVIC priorities and .
+ 	 \param[in] void.
+ 	 \return void
+ */
+void NVIC_priorities(void);
 
+/*!
+ 	 \brief	 This function enables a IRQ in the NVIC and establishes its priority.
  	 \param[in] interruptNumber is the desired IRQ to be activivated.
  	 \param[in] priority establishes the priority of the IRQ
  	 \return void
  */
-void NVIC_enableInterruptAndPriotity(InterruptType interruptNumber, PriorityLevelType priority);
+void NVIC_enable_interrupt_and_priotity(interrupt_t interrupt_number, priority_level_t priority);
 /********************************************************************************************/
 /********************************************************************************************/
 /********************************************************************************************/
 /*!
  	 \brief	 This function establishes the threshold level to interrupt the MCU.
-
  	 \param[in]  priority threshold to be established.
  	 \return void
  	 \todo Implement a mechanism to clear interrupts by a specific pin.
  */
-void NVIC_setBASEPRI_threshold(PriorityLevelType priority);
+void NVIC_set_basepri_threshold(priority_level_t priority);
 
 #endif /* NVIC_H_ */
